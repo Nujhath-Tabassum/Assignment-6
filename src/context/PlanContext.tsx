@@ -17,6 +17,7 @@ interface PlanContextType {
     addToPlan: (workout: Workout) => void;
     saveWorkout: (workout: Workout) => void;
     removeFromPlan: (id: number) => void;
+    removeSavedWorkout: (id: number) => void;
     markAsDone: (id: number) => void;
 }
 
@@ -73,18 +74,18 @@ export const PlanProvider = ({
     }, [completedWorkouts]);
 
     const addToPlan = (workout: Workout) => {
-    setTodayPlan((previousPlan) => {
-        if (
-            previousPlan.some(
-                (item) => item.id === workout.id
-            )
-        ) {
-            return previousPlan;
-        }
+        setTodayPlan((previousPlan) => {
+            if (
+                previousPlan.some(
+                    (item) => item.id === workout.id
+                )
+            ) {
+                return previousPlan;
+            }
 
-        return [...previousPlan, workout];
-    });
-};
+            return [...previousPlan, workout];
+        });
+    };
 
     const saveWorkout = (workout: Workout) => {
         setSavedWorkouts((previousSaved) => {
@@ -103,6 +104,14 @@ export const PlanProvider = ({
     const removeFromPlan = (id: number) => {
         setTodayPlan((previousPlan) =>
             previousPlan.filter(
+                (workout) => workout.id !== id
+            )
+        );
+    };
+
+    const removeSavedWorkout = (id: number) => {
+        setSavedWorkouts((previousSaved) =>
+            previousSaved.filter(
                 (workout) => workout.id !== id
             )
         );
@@ -127,6 +136,7 @@ export const PlanProvider = ({
                 addToPlan,
                 saveWorkout,
                 removeFromPlan,
+                removeSavedWorkout,
                 markAsDone,
             }}
         >

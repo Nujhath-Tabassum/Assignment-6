@@ -2,26 +2,106 @@
 
 import Image from "next/image";
 import Link from "next/link";
+
 import { usePlan } from "../../../context/PlanContext";
 
+import clockIcon from "../../../assects/icons8-clock-50.png";
+import flameIcon from "../../../assects/icons8-fire-32.png";
+import starIcon from "../../../assects/icons8-star-30.png";
+
 const TodaysPlan = () => {
-    const { todayPlan } = usePlan();
+    const {
+        todayPlan,
+        savedWorkouts,
+        completedWorkouts,
+        removeFromPlan,
+        markAsDone,
+    } = usePlan();
+
+    const totalMinutes = todayPlan.reduce(
+        (total, workout) => total + workout.duration,
+        0
+    );
+
+    const totalCalories = todayPlan.reduce(
+        (total, workout) => total + workout.caloriesBurned,
+        0
+    );
 
     return (
         <main className="min-h-screen bg-[#0d0e11] text-white">
 
             <div className="max-w-6xl mx-auto px-5 md:px-8 py-10">
 
+                {/* Heading */}
                 <h1 className="text-2xl font-bold uppercase">
-                    TODAY&apos;S PLAN
+                    MY PLAN
                 </h1>
 
                 <p className="text-gray-500 text-xs mt-2">
                     Your workouts for today.
                 </p>
 
+                {/* Summary */}
+                <div className="mt-6 bg-[#141519] border border-gray-800 rounded-xl overflow-hidden">
 
-                <div className="mt-6 space-y-3">
+                    <div className="grid grid-cols-3">
+
+                        <div className="px-5 py-6 border-r border-gray-800">
+                            <p className="text-[10px] text-gray-500">
+                                Exercises
+                            </p>
+
+                            <p className="text-3xl font-bold text-lime-400 mt-1">
+                                {todayPlan.length}
+                            </p>
+                        </div>
+
+                        <div className="px-5 py-6 border-r border-gray-800">
+                            <p className="text-[10px] text-gray-500">
+                                Minutes
+                            </p>
+
+                            <p className="text-3xl font-bold mt-1">
+                                {totalMinutes}
+                            </p>
+                        </div>
+
+                        <div className="px-5 py-6">
+                            <p className="text-[10px] text-gray-500">
+                                Calories
+                            </p>
+
+                            <p className="text-3xl font-bold mt-1">
+                                {totalCalories}
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {/* Tabs */}
+                <div className="flex mt-7">
+
+                    <Link
+                        href="/planner/todaysPlan"
+                        className="bg-[#202229] border border-gray-800 px-4 py-2.5 rounded-l-lg text-[10px] font-bold"
+                    >
+                        Today&apos;s Plan
+                    </Link>
+
+                    <Link
+                        href="/planner/savedPlan"
+                        className="bg-[#16171b] border border-gray-800 border-l-0 px-4 py-2.5 rounded-r-lg text-[10px] text-gray-500"
+                    >
+                        Saved&nbsp; {savedWorkouts.length}
+                    </Link>
+
+                </div>
+
+                {/* Workout List */}
+                <div className="mt-5 space-y-4">
 
                     {todayPlan.length === 0 ? (
 
@@ -46,68 +126,137 @@ const TodaysPlan = () => {
 
                     ) : (
 
-                        todayPlan.map((workout) => (
+                        todayPlan.map((workout) => {
 
-                            <div
-                                key={workout.id}
-                                className="bg-[#141519] border border-gray-800 rounded-xl p-3 flex items-center justify-between gap-4"
-                            >
+                            const isDone =
+                                completedWorkouts.includes(workout.id);
 
-                                <div className="flex items-center gap-3">
+                            return (
+                                <div
+                                    key={workout.id}
+                                    className="bg-[#141519] border border-gray-800 rounded-xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+                                >
 
-                                    <div className="relative w-24 h-14 rounded-lg overflow-hidden shrink-0">
+                                    {/* Workout Info */}
+                                    <div className="flex items-center gap-4">
 
-                                        <Image
-                                            src={workout.image}
-                                            alt={workout.name}
-                                            fill
-                                            className="object-cover"
-                                        />
+                                        {/* Image */}
+                                        <div className="relative w-32 h-[72px] rounded-lg overflow-hidden shrink-0">
 
-                                    </div>
+                                            <Image
+                                                src={workout.image}
+                                                alt={workout.name}
+                                                fill
+                                                className="object-cover"
+                                            />
 
+                                        </div>
 
-                                    <div>
+                                        {/* Details */}
+                                        <div>
 
-                                        <h3 className="text-xs font-bold uppercase">
-                                            {workout.name}
-                                        </h3>
+                                            <h3 className="text-sm font-bold uppercase">
+                                                {workout.name}
+                                            </h3>
 
-                                        <p className="text-[9px] text-gray-500 mt-1">
-                                            {workout.equipment}
-                                        </p>
+                                            <p className="text-[10px] text-gray-500 mt-1">
+                                                {workout.equipment}
+                                            </p>
 
-                                        <div className="flex gap-3 mt-2 text-[9px] text-gray-300">
+                                            {/* Workout Stats */}
+                                            <div className="flex items-center gap-3 mt-2 text-[9px] text-gray-300">
 
-                                            <span>
-                                                ◷ {workout.duration} min
-                                            </span>
+                                                {/* Clock */}
+                                                <span className="flex items-center gap-1">
+                                                    <Image
+                                                        src={clockIcon}
+                                                        alt="duration"
+                                                        width={13}
+                                                        height={13}
+                                                        style={{
+                                                            filter:
+                                                                "brightness(0) saturate(100%) invert(85%) sepia(90%) saturate(1000%) hue-rotate(25deg) brightness(105%) contrast(105%)",
+                                                        }}
+                                                    />
 
-                                            <span>
-                                                ♨ {workout.caloriesBurned} kcal
-                                            </span>
+                                                    {workout.duration} min
+                                                </span>
 
-                                            <span>
-                                                ☆ {workout.rating}
-                                            </span>
+                                                {/* Flame */}
+                                                <span className="flex items-center gap-1">
+                                                    <Image
+                                                        src={flameIcon}
+                                                        alt="calories"
+                                                        width={13}
+                                                        height={13}
+                                                        style={{
+                                                            filter:
+                                                                "brightness(0) saturate(100%) invert(85%) sepia(90%) saturate(1000%) hue-rotate(25deg) brightness(105%) contrast(105%)",
+                                                        }}
+                                                    />
+
+                                                    {workout.caloriesBurned} kcal
+                                                </span>
+
+                                                {/* Star */}
+                                                <span className="flex items-center gap-1">
+                                                    <Image
+                                                        src={starIcon}
+                                                        alt="rating"
+                                                        width={13}
+                                                        height={13}
+                                                        style={{
+                                                            filter:
+                                                                "brightness(0) saturate(100%) invert(85%) sepia(90%) saturate(1000%) hue-rotate(25deg) brightness(105%) contrast(105%)",
+                                                        }}
+                                                    />
+
+                                                    {workout.rating}
+                                                </span>
+
+                                            </div>
 
                                         </div>
 
                                     </div>
 
+                                    {/* Actions */}
+                                    <div className="flex items-center gap-3">
+
+                                        <Link
+                                            href={`/workouts/${workout.id}`}
+                                            className="border border-gray-700 px-4 py-2 rounded-full text-[9px] hover:border-gray-500 transition"
+                                        >
+                                            View Details
+                                        </Link>
+
+                                        <button
+                                            onClick={() =>
+                                                markAsDone(workout.id)
+                                            }
+                                            disabled={isDone}
+                                            className="bg-lime-400 text-black px-4 py-2 rounded-full text-[9px] font-bold disabled:opacity-50"
+                                        >
+                                            ✓ {isDone
+                                                ? "Done"
+                                                : "Mark as Done"}
+                                        </button>
+
+                                        <button
+                                            onClick={() =>
+                                                removeFromPlan(workout.id)
+                                            }
+                                            className="text-gray-500 hover:text-white text-xl px-1"
+                                            aria-label={`Remove ${workout.name}`}
+                                        >
+                                            ×
+                                        </button>
+
+                                    </div>
+
                                 </div>
-
-
-                                <Link
-                                    href={`/workouts/${workout.id}`}
-                                    className="border border-gray-700 px-4 py-2 rounded-full text-[9px]"
-                                >
-                                    View Details
-                                </Link>
-
-                            </div>
-
-                        ))
+                            );
+                        })
 
                     )}
 

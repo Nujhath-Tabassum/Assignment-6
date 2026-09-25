@@ -4,6 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePlan } from "../../context/PlanContext";
 
+import clockIcon from "../../assects/icons8-clock-50.png";
+import flameIcon from "../../assects/icons8-fire-32.png";
+import starIcon from "../../assects/icons8-star-30.png";
+
 const MyPlan = () => {
     const {
         todayPlan,
@@ -156,16 +160,49 @@ const MyPlan = () => {
 
                                             <div className="flex gap-3 mt-2 text-[9px] text-gray-300">
 
-                                                <span>
-                                                    ◷ {workout.duration} min
+                                                {/* Clock */}
+                                                <span className="flex items-center gap-1">
+                                                    <Image
+                                                        src={clockIcon}
+                                                        alt="duration"
+                                                        width={13}
+                                                        height={13}
+                                                        style={{
+                                                            filter:
+                                                                "brightness(0) saturate(100%) invert(85%) sepia(90%) saturate(1000%) hue-rotate(25deg) brightness(105%) contrast(105%)",
+                                                        }}
+                                                    />
+                                                    {workout.duration} min
                                                 </span>
 
-                                                <span>
-                                                    ♨ {workout.caloriesBurned} kcal
+                                                {/* Flame */}
+                                                <span className="flex items-center gap-1">
+                                                    <Image
+                                                        src={flameIcon}
+                                                        alt="calories"
+                                                        width={13}
+                                                        height={13}
+                                                        style={{
+                                                            filter:
+                                                                "brightness(0) saturate(100%) invert(85%) sepia(90%) saturate(1000%) hue-rotate(25deg) brightness(105%) contrast(105%)",
+                                                        }}
+                                                    />
+                                                    {workout.caloriesBurned} kcal
                                                 </span>
 
-                                                <span>
-                                                    ☆ {workout.rating}
+                                                {/* Star */}
+                                                <span className="flex items-center gap-1">
+                                                    <Image
+                                                        src={starIcon}
+                                                        alt="rating"
+                                                        width={13}
+                                                        height={13}
+                                                        style={{
+                                                            filter:
+                                                                "brightness(0) saturate(100%) invert(85%) sepia(90%) saturate(1000%) hue-rotate(25deg) brightness(105%) contrast(105%)",
+                                                        }}
+                                                    />
+                                                    {workout.rating}
                                                 </span>
 
                                             </div>
