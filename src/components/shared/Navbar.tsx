@@ -1,16 +1,21 @@
+"use client";
 
 import React from "react";
 import Image from "next/image";
 import logo from "../../assects/logo.png";
 import Link from "next/link";
 
+import { usePlan } from "../../context/PlanContext";
+
 const Navbar = () => {
+  const { todayPlan, savedWorkouts } = usePlan();
+
   return (
     <div className="navbar min-h-16 px-4 sm:px-6 border-b border-gray-800">
 
       {/* Logo */}
       <div className="navbar-start">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <Image
             src={logo}
             alt="Fitlog Logo"
@@ -21,7 +26,7 @@ const Navbar = () => {
           <span className="text-white font-bold text-lg">
             FITLOG
           </span>
-        </div>
+        </Link>
       </div>
 
       {/* Navigation - Desktop */}
@@ -39,7 +44,7 @@ const Navbar = () => {
           {/* My Plan */}
           <Link
             href="/planner"
-            className="px-4 py-1.5 text-sm text-gray-400 hover:text-white cursor-pointer"
+            className="px-4 py-1.5 text-sm text-gray-400 hover:text-white"
           >
             My Plan
           </Link>
@@ -51,12 +56,23 @@ const Navbar = () => {
       <div className="navbar-end">
         <div className="flex items-center gap-3 sm:gap-6 text-sm">
 
-          <span className="text-gray-300">
+          {/* Plan Counter */}
+          <Link
+            href="/planner"
+            className="text-gray-300 hover:text-white flex items-center gap-1.5"
+          >
             Plan
-          </span>
+            <span className="bg-lime-400 text-black font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              {todayPlan.length}
+            </span>
+          </Link>
 
-          <span className="text-gray-400">
+          {/* Saved Counter */}
+          <span className="text-gray-400 flex items-center gap-1.5">
             Saved
+            <span className="bg-lime-400 text-black font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              {savedWorkouts.length}
+            </span>
           </span>
 
           {/* Mobile Menu */}
@@ -75,18 +91,16 @@ const Navbar = () => {
               className="menu dropdown-content bg-base-100 rounded-box z-10 mt-3 w-40 p-2 shadow"
             >
 
-              {/* Mobile Workouts */}
               <li>
-                <Link href="/workouts">
+                <Link href="/">
                   Workouts
                 </Link>
               </li>
 
-              {/* Mobile My Plan */}
               <li>
-                <a>
+                <Link href="/planner">
                   My Plan
-                </a>
+                </Link>
               </li>
 
             </ul>
