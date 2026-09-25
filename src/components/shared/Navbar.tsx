@@ -4,11 +4,13 @@ import React from "react";
 import Image from "next/image";
 import logo from "../../assects/logo.png";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { usePlan } from "../../context/PlanContext";
 
 const Navbar = () => {
   const { todayPlan, savedWorkouts } = usePlan();
+  const pathname = usePathname();
 
   return (
     <div className="navbar min-h-16 px-4 sm:px-6 border-b border-gray-800">
@@ -36,7 +38,11 @@ const Navbar = () => {
           {/* Workouts */}
           <Link
             href="/"
-            className="px-4 py-1.5 text-sm text-gray-400 hover:text-white"
+            className={`px-4 py-1.5 text-sm rounded-full ${
+              pathname === "/"
+                ? "bg-[#1d2b0d] text-lime-400"
+                : "text-gray-400 hover:text-white"
+            }`}
           >
             Workouts
           </Link>
@@ -44,7 +50,11 @@ const Navbar = () => {
           {/* My Plan */}
           <Link
             href="/planner"
-            className="px-4 py-1.5 text-sm text-gray-400 hover:text-white"
+            className={`px-4 py-1.5 text-sm rounded-full ${
+              pathname === "/planner"
+                ? "bg-[#1d2b0d] text-lime-400"
+                : "text-gray-400 hover:text-white"
+            }`}
           >
             My Plan
           </Link>
