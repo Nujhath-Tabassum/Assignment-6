@@ -1,6 +1,7 @@
 
 import Image from "next/image";
 import React from "react";
+import PlanButtons from "../../../app/buttons/PlanButtons";
 
 interface Workout {
     id: number;
@@ -161,13 +162,7 @@ const WorkoutDetails = async ({
                         {/* Buttons */}
                         <div className="flex flex-wrap gap-3 mt-7">
 
-                            <button className="bg-lime-400 text-black px-5 py-3 rounded-md font-bold text-sm">
-                                ADD TO TODAY&apos;S PLAN
-                            </button>
-
-                            <button className="border border-gray-700 px-5 py-3 rounded-md text-sm">
-                                SAVE FOR LATER
-                            </button>
+                            <PlanButtons workout={workout} />
 
                         </div>
 

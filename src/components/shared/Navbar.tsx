@@ -1,6 +1,8 @@
+
 import React from "react";
 import Image from "next/image";
 import logo from "../../assects/logo.png";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -25,13 +27,23 @@ const Navbar = () => {
       {/* Navigation - Desktop */}
       <div className="navbar-center hidden md:flex">
         <div className="flex items-center gap-2">
-          <a className="px-4 py-1.5 text-sm text-gray-400 hover:text-white cursor-pointer">
-            Workouts
-          </a>
 
-          <a className="px-4 py-1.5 text-sm text-gray-400 hover:text-white cursor-pointer">
+          {/* Workouts */}
+          <Link
+            href="/"
+            className="px-4 py-1.5 text-sm text-gray-400 hover:text-white"
+          >
+            Workouts
+          </Link>
+
+          {/* My Plan */}
+          <Link
+            href="/planner"
+            className="px-4 py-1.5 text-sm text-gray-400 hover:text-white cursor-pointer"
+          >
             My Plan
-          </a>
+          </Link>
+
         </div>
       </div>
 
@@ -49,6 +61,7 @@ const Navbar = () => {
 
           {/* Mobile Menu */}
           <div className="dropdown dropdown-end md:hidden">
+
             <div
               tabIndex={0}
               role="button"
@@ -61,14 +74,23 @@ const Navbar = () => {
               tabIndex={-1}
               className="menu dropdown-content bg-base-100 rounded-box z-10 mt-3 w-40 p-2 shadow"
             >
+
+              {/* Mobile Workouts */}
               <li>
-                <a>Workouts</a>
+                <Link href="/workouts">
+                  Workouts
+                </Link>
               </li>
 
+              {/* Mobile My Plan */}
               <li>
-                <a>My Plan</a>
+                <a>
+                  My Plan
+                </a>
               </li>
+
             </ul>
+
           </div>
 
         </div>
