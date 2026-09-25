@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -18,13 +19,36 @@ const TodaysPlan = () => {
         markAsDone,
     } = usePlan();
 
+    const [sortBy, setSortBy] = useState<
+        "duration" | "calories" | "rating"
+    >("duration");
+
+    const sortedTodayPlan = [...todayPlan].sort((a, b) => {
+        const valueA =
+            sortBy === "duration"
+                ? Number(a.duration)
+                : sortBy === "calories"
+                ? Number(a.caloriesBurned)
+                : Number(a.rating);
+
+        const valueB =
+            sortBy === "duration"
+                ? Number(b.duration)
+                : sortBy === "calories"
+                ? Number(b.caloriesBurned)
+                : Number(b.rating);
+
+        return valueA - valueB;
+    });
+
     const totalMinutes = todayPlan.reduce(
-        (total, workout) => total + workout.duration,
+        (total, workout) => total + Number(workout.duration),
         0
     );
 
     const totalCalories = todayPlan.reduce(
-        (total, workout) => total + workout.caloriesBurned,
+        (total, workout) =>
+            total + Number(workout.caloriesBurned),
         0
     );
 
@@ -100,6 +124,63 @@ const TodaysPlan = () => {
 
                 </div>
 
+                {/* Sort By */}
+                <div className="flex justify-end items-center mt-4">
+                    <div className="flex items-center gap-2">
+
+                        <span className="text-[10px] text-gray-500">
+                            Sort By
+                        </span>
+
+                        <div className="relative">
+
+                            <select
+                                value={sortBy}
+                                onChange={(e) =>
+                                    setSortBy(
+                                        e.target.value as
+                                            | "duration"
+                                            | "calories"
+                                            | "rating"
+                                    )
+                                }
+                                className="appearance-none bg-[#16171b] border border-gray-800 text-gray-300 text-[10px] rounded-lg pl-3 pr-8 py-2 outline-none cursor-pointer"
+                            >
+
+                                <option value="duration">
+                                    Duration
+                                </option>
+
+                                <option value="calories">
+                                    Calories
+                                </option>
+
+                                <option value="rating">
+                                    Rating
+                                </option>
+
+                            </select>
+
+                            {/* Chevron */}
+                            <svg
+                                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3 h-3 pointer-events-none text-gray-500"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                            >
+                                <path
+                                    d="M5 7.5L10 12.5L15 7.5"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+
+                        </div>
+
+                    </div>
+                </div>
+
                 {/* Workout List */}
                 <div className="mt-5 space-y-4">
 
@@ -126,7 +207,7 @@ const TodaysPlan = () => {
 
                     ) : (
 
-                        todayPlan.map((workout) => {
+                        sortedTodayPlan.map((workout) => {
 
                             const isDone =
                                 completedWorkouts.includes(workout.id);
