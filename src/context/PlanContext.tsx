@@ -12,9 +12,12 @@ import type { Workout } from "../types/types";
 interface PlanContextType {
     todayPlan: Workout[];
     savedWorkouts: Workout[];
+    completedWorkouts: number[];
 
     addToPlan: (workout: Workout) => void;
     saveWorkout: (workout: Workout) => void;
+    removeFromPlan: (id: number) => void;
+    markAsDone: (id: number) => void;
 }
 
 const PlanContext = createContext<PlanContextType | undefined>(
@@ -28,10 +31,12 @@ export const PlanProvider = ({
 }) => {
     const [todayPlan, setTodayPlan] = useState<Workout[]>([]);
     const [savedWorkouts, setSavedWorkouts] = useState<Workout[]>([]);
+    const [completedWorkouts, setCompletedWorkouts] = useState<number[]>([]);
 
     useEffect(() => {
         const plan = localStorage.getItem("todayPlan");
         const saved = localStorage.getItem("savedWorkouts");
+        const completed = localStorage.getItem("completedWorkouts");
 
         if (plan) {
             setTodayPlan(JSON.parse(plan));
@@ -39,6 +44,10 @@ export const PlanProvider = ({
 
         if (saved) {
             setSavedWorkouts(JSON.parse(saved));
+        }
+
+        if (completed) {
+            setCompletedWorkouts(JSON.parse(completed));
         }
     }, []);
 
@@ -56,23 +65,26 @@ export const PlanProvider = ({
         );
     }, [savedWorkouts]);
 
+    useEffect(() => {
+        localStorage.setItem(
+            "completedWorkouts",
+            JSON.stringify(completedWorkouts)
+        );
+    }, [completedWorkouts]);
+
     const addToPlan = (workout: Workout) => {
-        setTodayPlan((previousPlan) => {
-            if (
-                previousPlan.some(
-                    (item) => item.id === workout.id
-                )
-            ) {
-                return previousPlan;
-            }
+    setTodayPlan((previousPlan) => {
+        if (
+            previousPlan.some(
+                (item) => item.id === workout.id
+            )
+        ) {
+            return previousPlan;
+        }
 
-            if (previousPlan.length >= 5) {
-                return previousPlan;
-            }
-
-            return [...previousPlan, workout];
-        });
-    };
+        return [...previousPlan, workout];
+    });
+};
 
     const saveWorkout = (workout: Workout) => {
         setSavedWorkouts((previousSaved) => {
@@ -88,13 +100,34 @@ export const PlanProvider = ({
         });
     };
 
+    const removeFromPlan = (id: number) => {
+        setTodayPlan((previousPlan) =>
+            previousPlan.filter(
+                (workout) => workout.id !== id
+            )
+        );
+    };
+
+    const markAsDone = (id: number) => {
+        setCompletedWorkouts((previousCompleted) => {
+            if (previousCompleted.includes(id)) {
+                return previousCompleted;
+            }
+
+            return [...previousCompleted, id];
+        });
+    };
+
     return (
         <PlanContext.Provider
             value={{
                 todayPlan,
                 savedWorkouts,
+                completedWorkouts,
                 addToPlan,
                 saveWorkout,
+                removeFromPlan,
+                markAsDone,
             }}
         >
             {children}

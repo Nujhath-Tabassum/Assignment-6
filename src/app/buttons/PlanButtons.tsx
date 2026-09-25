@@ -28,7 +28,7 @@ const PlanButtons = ({ workout }: PlanButtonsProps) => {
 
             <button
                 onClick={() => addToPlan(workout)}
-                disabled={isInPlan || todayPlan.length >= 5}
+                disabled={isInPlan}
                 className="bg-lime-400 text-black px-5 py-3 rounded-md font-bold text-sm disabled:opacity-50"
             >
                 {isInPlan

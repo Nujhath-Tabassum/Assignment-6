@@ -1,10 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePlan } from "../../context/PlanContext";
 
 const MyPlan = () => {
-    const { todayPlan, savedWorkouts } = usePlan();
+    const {
+        todayPlan,
+        savedWorkouts,
+        completedWorkouts,
+        removeFromPlan,
+        markAsDone,
+    } = usePlan();
 
     const totalMinutes = todayPlan.reduce(
         (total, workout) => total + workout.duration,
@@ -19,24 +26,22 @@ const MyPlan = () => {
     return (
         <main className="min-h-screen bg-[#0d0e11] text-white">
 
-            <div className="max-w-6xl mx-auto px-5 md:px-8 py-10">
+            <div className="max-w-6xl mx-auto px-5 md:px-8 py-8">
 
+                {/* Heading */}
                 <h1 className="text-2xl font-bold uppercase">
                     MY PLAN
                 </h1>
 
-                <p className="text-gray-500 text-xs mt-2">
+                <p className="text-gray-500 text-xs mt-1">
                     Cap of five lifts for today. Finish them, then load more.
                 </p>
 
-
                 {/* Summary */}
-
-                <div className="mt-6 bg-[#141519] border border-gray-800 rounded-xl">
-
+                <div className="mt-5 bg-[#141519] border border-gray-800 rounded-xl">
                     <div className="grid grid-cols-3">
 
-                        <div className="px-5 py-6 border-r border-gray-800">
+                        <div className="px-4 md:px-5 py-6 border-r border-gray-800">
                             <p className="text-[10px] text-gray-500">
                                 Exercises
                             </p>
@@ -46,8 +51,7 @@ const MyPlan = () => {
                             </p>
                         </div>
 
-
-                        <div className="px-5 py-6 border-r border-gray-800">
+                        <div className="px-4 md:px-5 py-6 border-r border-gray-800">
                             <p className="text-[10px] text-gray-500">
                                 Minutes
                             </p>
@@ -57,8 +61,7 @@ const MyPlan = () => {
                             </p>
                         </div>
 
-
-                        <div className="px-5 py-6">
+                        <div className="px-4 md:px-5 py-6">
                             <p className="text-[10px] text-gray-500">
                                 Calories
                             </p>
@@ -69,27 +72,146 @@ const MyPlan = () => {
                         </div>
 
                     </div>
-
                 </div>
 
-
-                {/* Navigation */}
-
-                <div className="flex gap-3 mt-7">
+                {/* Tabs */}
+                <div className="flex gap-0 mt-6">
 
                     <Link
-                        href="/my-plan/todays-plan"
-                        className="bg-[#16171b] border border-gray-800 px-5 py-3 rounded-lg text-xs hover:bg-[#202229]"
+                        href="/planner/todaysPlan"
+                        className="bg-[#202229] border border-gray-800 px-4 py-2.5 rounded-l-lg text-[10px] font-bold"
                     >
                         Today&apos;s Plan
                     </Link>
 
                     <Link
-                        href="/my-plan/saved"
-                        className="bg-[#16171b] border border-gray-800 px-5 py-3 rounded-lg text-xs hover:bg-[#202229]"
+                        href="/planner/savedPlan"
+                        className="bg-[#16171b] border border-gray-800 border-l-0 px-4 py-2.5 rounded-r-lg text-[10px] text-gray-500"
                     >
-                        Saved ({savedWorkouts.length})
+                        Saved&nbsp; {savedWorkouts.length}
                     </Link>
+
+                </div>
+
+                {/* Workout List */}
+                <div className="mt-4 space-y-3">
+
+                    {todayPlan.length === 0 ? (
+
+                        <div className="min-h-[235px] border border-dashed border-gray-800 rounded-xl flex flex-col items-center justify-center text-center">
+
+                            <h2 className="text-base font-bold uppercase">
+                                NOTHING HERE YET
+                            </h2>
+
+                            <p className="text-[10px] text-gray-500 mt-2">
+                                Browse the library and add a lift to get today moving.
+                            </p>
+
+                            <Link
+                                href="/"
+                                className="mt-5 bg-lime-400 text-black px-6 py-2.5 rounded-full text-[10px] font-bold"
+                            >
+                                Go to workouts
+                            </Link>
+
+                        </div>
+
+                    ) : (
+
+                        todayPlan.map((workout) => {
+
+                            const isDone =
+                                completedWorkouts.includes(workout.id);
+
+                            return (
+                                <div
+                                    key={workout.id}
+                                    className="bg-[#141519] border border-gray-800 rounded-xl p-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+                                >
+
+                                    {/* Left */}
+                                    <div className="flex items-center gap-3">
+
+                                        <div className="relative w-24 h-14 rounded-lg overflow-hidden shrink-0">
+
+                                            <Image
+                                                src={workout.image}
+                                                alt={workout.name}
+                                                fill
+                                                className="object-cover"
+                                            />
+
+                                        </div>
+
+                                        <div>
+
+                                            <h3 className="text-xs font-bold uppercase">
+                                                {workout.name}
+                                            </h3>
+
+                                            <p className="text-[9px] text-gray-500 mt-1">
+                                                {workout.equipment}
+                                            </p>
+
+                                            <div className="flex gap-3 mt-2 text-[9px] text-gray-300">
+
+                                                <span>
+                                                    ◷ {workout.duration} min
+                                                </span>
+
+                                                <span>
+                                                    ♨ {workout.caloriesBurned} kcal
+                                                </span>
+
+                                                <span>
+                                                    ☆ {workout.rating}
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    {/* Buttons */}
+                                    <div className="flex items-center gap-2">
+
+                                        <Link
+                                            href={`/workouts/${workout.id}`}
+                                            className="border border-gray-700 px-4 py-2 rounded-full text-[9px] hover:border-gray-500"
+                                        >
+                                            View Details
+                                        </Link>
+
+                                        <button
+                                            onClick={() =>
+                                                markAsDone(workout.id)
+                                            }
+                                            disabled={isDone}
+                                            className="bg-lime-400 text-black px-4 py-2 rounded-full text-[9px] font-bold disabled:opacity-50"
+                                        >
+                                            {isDone
+                                                ? "✓ Done"
+                                                : "✓ Mark as Done"}
+                                        </button>
+
+                                        <button
+                                            onClick={() =>
+                                                removeFromPlan(workout.id)
+                                            }
+                                            className="text-gray-500 hover:text-white text-lg px-2"
+                                        >
+                                            ×
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            );
+                        })
+
+                    )}
 
                 </div>
 

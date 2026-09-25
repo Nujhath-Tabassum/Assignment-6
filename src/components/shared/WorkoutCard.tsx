@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,8 +13,6 @@ interface Workout {
     sets: number;
     reps: string;
     rating: number;
-    description: string;
-    instructions: string[];
 }
 
 interface WorkoutCardProps {
@@ -25,8 +22,9 @@ interface WorkoutCardProps {
 const WorkoutCard = ({ workout }: WorkoutCardProps) => {
     return (
         <Link href={`/workouts/${workout.id}`}>
-            <div className="bg-[#16171b] border border-gray-800 rounded-xl overflow-hidden">
+            <div className="bg-[#16171b] border border-gray-800 rounded-xl overflow-hidden hover:border-gray-700 transition">
 
+                {/* Image */}
                 <div className="relative w-full h-44">
                     <Image
                         src={workout.image}
@@ -36,22 +34,50 @@ const WorkoutCard = ({ workout }: WorkoutCardProps) => {
                     />
                 </div>
 
-                <div className="p-5">
+                {/* Card Content */}
+                <div className="p-4">
 
-                    <div className="flex gap-2 mb-4">
+                    {/* Muscle Groups */}
+                    <div className="flex gap-2 mb-3">
                         {workout.muscleGroups.slice(0, 2).map((muscle) => (
                             <span
                                 key={muscle}
-                                className="bg-lime-400 text-black text-[10px] font-bold px-2.5 py-1 rounded-full"
+                                className="bg-lime-400 text-black text-[9px] font-bold px-2.5 py-1 rounded-full"
                             >
                                 {muscle.toUpperCase()}
                             </span>
                         ))}
                     </div>
 
-                    <h3 className="text-white font-bold">
+                    {/* Workout Name */}
+                    <h3 className="text-white text-sm font-bold uppercase tracking-wide">
                         {workout.name}
                     </h3>
+
+                    {/* Equipment */}
+                    <p className="text-gray-500 text-xs mt-1">
+                        {workout.equipment}
+                    </p>
+
+                    {/* Divider */}
+                    <div className="border-t border-gray-800 my-3"></div>
+
+                    {/* Workout Info */}
+                    <div className="flex items-center gap-4 text-gray-400 text-[10px]">
+
+                        <span className="flex items-center gap-1">
+                            ◷ {workout.duration} min
+                        </span>
+
+                        <span className="flex items-center gap-1">
+                            🔥 {workout.caloriesBurned} kcal
+                        </span>
+
+                        <span className="flex items-center gap-1">
+                            ☆ {workout.rating}
+                        </span>
+
+                    </div>
 
                 </div>
             </div>
