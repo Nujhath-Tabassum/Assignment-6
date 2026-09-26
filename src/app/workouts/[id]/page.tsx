@@ -1,6 +1,4 @@
-
 import Image from "next/image";
-import React from "react";
 import PlanButtons from "../../../app/buttons/PlanButtons";
 
 interface Workout {
@@ -46,29 +44,29 @@ const WorkoutDetails = async ({
 
     return (
         <main className="min-h-screen bg-[#0d0e11] text-white px-5 py-10">
-
             <div className="max-w-7xl mx-auto">
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                    {/* Image */}
-                    <div className="relative w-full h-[500px]">
+                    {/* Workout Image */}
+                    <div className="relative w-full h-[400px] md:h-[500px]">
                         <Image
                             src={workout.image}
                             alt={workout.name}
                             fill
+                            priority
                             className="object-cover rounded-xl"
                         />
                     </div>
 
-                    {/* Details */}
+                    {/* Workout Details */}
                     <div>
 
-                        <h1 className="text-4xl font-bold uppercase">
+                        <h1 className="text-3xl md:text-4xl font-bold uppercase">
                             {workout.name}
                         </h1>
 
-                        <p className="text-gray-400 mt-2">
+                        <p className="text-gray-400 mt-2 leading-relaxed">
                             {workout.description}
                         </p>
 
@@ -84,56 +82,70 @@ const WorkoutDetails = async ({
                             ))}
                         </div>
 
-                        {/* Information */}
-                        <div className="bg-[#16171b] border border-gray-800 rounded-xl mt-5">
+                        {/* Workout Information */}
+                        <div className="bg-[#16171b] border border-gray-800 rounded-xl mt-5 overflow-hidden">
 
-                            <div className="flex justify-between px-4 py-4 border-b border-gray-800">
+                            <div className="flex justify-between gap-4 px-4 py-4 border-b border-gray-800">
                                 <span className="text-xs text-gray-500">
                                     EQUIPMENT
                                 </span>
-                                <span>{workout.equipment}</span>
+                                <span className="text-sm text-right">
+                                    {workout.equipment}
+                                </span>
                             </div>
 
-                            <div className="flex justify-between px-4 py-4 border-b border-gray-800">
+                            <div className="flex justify-between gap-4 px-4 py-4 border-b border-gray-800">
                                 <span className="text-xs text-gray-500">
                                     DIFFICULTY
                                 </span>
-                                <span>{workout.difficulty}</span>
+                                <span className="text-sm text-right">
+                                    {workout.difficulty}
+                                </span>
                             </div>
 
-                            <div className="flex justify-between px-4 py-4 border-b border-gray-800">
+                            <div className="flex justify-between gap-4 px-4 py-4 border-b border-gray-800">
                                 <span className="text-xs text-gray-500">
                                     SETS
                                 </span>
-                                <span>{workout.sets}</span>
+                                <span className="text-sm">
+                                    {workout.sets}
+                                </span>
                             </div>
 
-                            <div className="flex justify-between px-4 py-4 border-b border-gray-800">
+                            <div className="flex justify-between gap-4 px-4 py-4 border-b border-gray-800">
                                 <span className="text-xs text-gray-500">
                                     REPS
                                 </span>
-                                <span>{workout.reps}</span>
+                                <span className="text-sm">
+                                    {workout.reps}
+                                </span>
                             </div>
 
-                            <div className="flex justify-between px-4 py-4 border-b border-gray-800">
+                            <div className="flex justify-between gap-4 px-4 py-4 border-b border-gray-800">
                                 <span className="text-xs text-gray-500">
                                     DURATION
                                 </span>
-                                <span>{workout.duration} min</span>
+                                <span className="text-sm">
+                                    {workout.duration} min
+                                </span>
                             </div>
 
-                            <div className="flex justify-between px-4 py-4 border-b border-gray-800">
+                            <div className="flex justify-between gap-4 px-4 py-4 border-b border-gray-800">
                                 <span className="text-xs text-gray-500">
                                     CALORIES
                                 </span>
-                                <span>{workout.caloriesBurned} kcal</span>
+                                <span className="text-sm">
+                                    {workout.caloriesBurned} kcal
+                                </span>
                             </div>
 
-                            <div className="flex justify-between px-4 py-4">
+                            <div className="flex justify-between gap-4 px-4 py-4">
                                 <span className="text-xs text-gray-500">
                                     RATING
                                 </span>
-                                <span>⭐ {workout.rating}</span>
+                                <span className="text-sm">
+                                    ⭐ {workout.rating}
+                                </span>
                             </div>
 
                         </div>
@@ -146,7 +158,6 @@ const WorkoutDetails = async ({
                             </h2>
 
                             <ol className="mt-3 space-y-3 text-sm text-gray-400 list-decimal list-inside">
-
                                 {workout.instructions.map(
                                     (instruction, index) => (
                                         <li key={index}>
@@ -154,17 +165,12 @@ const WorkoutDetails = async ({
                                         </li>
                                     )
                                 )}
-
                             </ol>
 
                         </div>
 
-                        {/* Buttons */}
-                        <div className="flex flex-wrap gap-3 mt-7">
-
-                            <PlanButtons workout={workout} />
-
-                        </div>
+                        {/* Action Buttons */}
+                        <PlanButtons workout={workout} />
 
                     </div>
                 </div>
@@ -174,4 +180,3 @@ const WorkoutDetails = async ({
 };
 
 export default WorkoutDetails;
-

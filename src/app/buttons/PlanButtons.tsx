@@ -2,6 +2,8 @@
 
 import type { Workout } from "../../types/types";
 import { usePlan } from "../../context/PlanContext";
+import { toast } from "react-toastify";
+import { Plus, Bookmark } from "lucide-react";
 
 interface PlanButtonsProps {
     workout: Workout;
@@ -23,27 +25,43 @@ const PlanButtons = ({ workout }: PlanButtonsProps) => {
         (item) => item.id === workout.id
     );
 
+    const handleAddToPlan = () => {
+        if (isInPlan) {
+            toast.info("Already in your plan!");
+            return;
+        }
+
+        addToPlan(workout);
+        toast.success("Added to today's plan!");
+    };
+
     return (
         <div className="flex flex-wrap gap-3 mt-7">
 
+            {/* Add to Plan */}
             <button
-                onClick={() => addToPlan(workout)}
-                disabled={isInPlan}
-                className="bg-lime-400 text-black px-5 py-3 rounded-md font-bold text-sm disabled:opacity-50"
+                onClick={handleAddToPlan}
+                className="bg-lime-400 text-black px-5 py-3 rounded-md font-bold text-sm flex items-center gap-2"
             >
-                {isInPlan
-                    ? "Added to today's plan"
-                    : "Add to today's plan"}
+                <Plus size={18} />
+                Add to today's plan
             </button>
 
+            {/* Save */}
             <button
-                onClick={() => saveWorkout(workout)}
-                disabled={isSaved}
-                className="border border-gray-700 px-5 py-3 rounded-md text-sm disabled:opacity-50"
+                onClick={() => {
+                    if (isSaved) {
+                        toast.info("Already saved!");
+                        return;
+                    }
+
+                    saveWorkout(workout);
+                    toast.success("Workout saved!");
+                }}
+                className="border border-gray-700 px-5 py-3 rounded-md text-sm flex items-center gap-2"
             >
-                {isSaved
-                    ? "Saved"
-                    : "Save for later"}
+                <Bookmark size={18} />
+                Save for later
             </button>
 
         </div>

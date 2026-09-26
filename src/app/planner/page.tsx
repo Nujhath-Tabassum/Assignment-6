@@ -3,6 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Check, X } from "lucide-react";
+import { toast } from "react-toastify";
+
 import { usePlan } from "../../context/PlanContext";
 
 import clockIcon from "../../assects/icons8-clock-50.png";
@@ -46,7 +49,6 @@ const MyPlan = () => {
 
     return (
         <main className="min-h-screen bg-[#0d0e11] text-white">
-
             <div className="max-w-6xl mx-auto px-5 md:px-8 py-8">
 
                 {/* Heading */}
@@ -291,24 +293,33 @@ const MyPlan = () => {
                                         </Link>
 
                                         <button
-                                            onClick={() =>
-                                                markAsDone(workout.id)
-                                            }
+                                            onClick={() => {
+                                                markAsDone(workout.id);
+                                                toast.success(
+                                                    "Workout marked as done!"
+                                                );
+                                            }}
                                             disabled={isDone}
-                                            className="bg-lime-400 text-black px-4 py-2 rounded-full text-[9px] font-bold disabled:opacity-50"
+                                            className="bg-lime-400 text-black px-4 py-2 rounded-full text-[9px] font-bold disabled:opacity-50 flex items-center gap-1.5"
                                         >
+                                            <Check size={13} />
+
                                             {isDone
-                                                ? "✓ Done"
-                                                : "✓ Mark as Done"}
+                                                ? "Done"
+                                                : "Mark as Done"}
                                         </button>
 
                                         <button
-                                            onClick={() =>
-                                                removeFromPlan(workout.id)
-                                            }
-                                            className="text-gray-500 hover:text-white text-lg px-2"
+                                            onClick={() => {
+                                                removeFromPlan(workout.id);
+                                                toast.success(
+                                                    "Workout removed!"
+                                                );
+                                            }}
+                                            className="text-gray-500 hover:text-white px-2"
+                                            aria-label="Remove workout"
                                         >
-                                            ×
+                                            <X size={18} />
                                         </button>
 
                                     </div>
@@ -322,7 +333,6 @@ const MyPlan = () => {
                 </div>
 
             </div>
-
         </main>
     );
 };

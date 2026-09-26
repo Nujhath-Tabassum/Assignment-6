@@ -14,7 +14,7 @@ interface PlanContextType {
     savedWorkouts: Workout[];
     completedWorkouts: number[];
 
-    addToPlan: (workout: Workout) => void;
+    addToPlan: (workout: Workout) => boolean;
     saveWorkout: (workout: Workout) => void;
     removeFromPlan: (id: number) => void;
     removeSavedWorkout: (id: number) => void;
@@ -73,8 +73,20 @@ export const PlanProvider = ({
         );
     }, [completedWorkouts]);
 
-    const addToPlan = (workout: Workout) => {
+    const addToPlan = (workout: Workout): boolean => {
+        if (todayPlan.some((item) => item.id === workout.id)) {
+            return false;
+        }
+
+        if (todayPlan.length >= 5) {
+            return false;
+        }
+
         setTodayPlan((previousPlan) => {
+            if (previousPlan.length >= 5) {
+                return previousPlan;
+            }
+
             if (
                 previousPlan.some(
                     (item) => item.id === workout.id
@@ -85,6 +97,8 @@ export const PlanProvider = ({
 
             return [...previousPlan, workout];
         });
+
+        return true;
     };
 
     const saveWorkout = (workout: Workout) => {

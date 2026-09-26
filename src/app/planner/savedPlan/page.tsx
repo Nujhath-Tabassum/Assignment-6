@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { usePlan } from "../../../context/PlanContext";
+import { toast } from "react-toastify";
 
 import clockIcon from "../../../assects/icons8-clock-50.png";
 import flameIcon from "../../../assects/icons8-fire-32.png";
@@ -53,7 +54,7 @@ const SavedPlan = () => {
                 </h1>
 
                 <p className="text-gray-500 text-xs mt-2">
-                    Your saved workouts for later.
+                    Cap of five lifts for today. Finish them, then load more.
                 </p>
 
                 {/* Summary */}
@@ -116,6 +117,7 @@ const SavedPlan = () => {
 
                 {/* Sort By */}
                 <div className="flex justify-end items-center mt-4">
+
                     <div className="flex items-center gap-2">
 
                         <span className="text-[10px] text-gray-500">
@@ -123,6 +125,7 @@ const SavedPlan = () => {
                         </span>
 
                         <div className="relative">
+
                             <select
                                 value={sortBy}
                                 onChange={(e) =>
@@ -161,9 +164,11 @@ const SavedPlan = () => {
                                     strokeLinejoin="round"
                                 />
                             </svg>
+
                         </div>
 
                     </div>
+
                 </div>
 
                 {/* Workout List */}
@@ -174,11 +179,11 @@ const SavedPlan = () => {
                         <div className="min-h-[235px] border border-dashed border-gray-800 rounded-xl flex flex-col items-center justify-center text-center">
 
                             <h2 className="text-base font-bold uppercase">
-                                NO SAVED WORKOUTS
+                                NOTHING HERE YET
                             </h2>
 
                             <p className="text-[10px] text-gray-500 mt-2">
-                                Save a workout from the library to see it here.
+                                Browse the library and add a lift to get today moving.
                             </p>
 
                             <Link
@@ -230,6 +235,7 @@ const SavedPlan = () => {
 
                                             {/* Clock */}
                                             <span className="flex items-center gap-1">
+
                                                 <Image
                                                     src={clockIcon}
                                                     alt="duration"
@@ -240,11 +246,14 @@ const SavedPlan = () => {
                                                             "brightness(0) saturate(100%) invert(85%) sepia(90%) saturate(1000%) hue-rotate(25deg) brightness(105%) contrast(105%)",
                                                     }}
                                                 />
+
                                                 {workout.duration} min
+
                                             </span>
 
                                             {/* Flame */}
                                             <span className="flex items-center gap-1">
+
                                                 <Image
                                                     src={flameIcon}
                                                     alt="calories"
@@ -255,11 +264,14 @@ const SavedPlan = () => {
                                                             "brightness(0) saturate(100%) invert(85%) sepia(90%) saturate(1000%) hue-rotate(25deg) brightness(105%) contrast(105%)",
                                                     }}
                                                 />
+
                                                 {workout.caloriesBurned} kcal
+
                                             </span>
 
                                             {/* Star */}
                                             <span className="flex items-center gap-1">
+
                                                 <Image
                                                     src={starIcon}
                                                     alt="rating"
@@ -270,7 +282,9 @@ const SavedPlan = () => {
                                                             "brightness(0) saturate(100%) invert(85%) sepia(90%) saturate(1000%) hue-rotate(25deg) brightness(105%) contrast(105%)",
                                                     }}
                                                 />
+
                                                 {workout.rating}
+
                                             </span>
 
                                         </div>
@@ -292,9 +306,10 @@ const SavedPlan = () => {
 
                                     {/* Remove */}
                                     <button
-                                        onClick={() =>
-                                            removeSavedWorkout(workout.id)
-                                        }
+                                        onClick={() => {
+                                            removeSavedWorkout(workout.id);
+                                            toast.success("Workout removed!");
+                                        }}
                                         className="text-gray-500 hover:text-white text-xl px-1"
                                         aria-label={`Remove ${workout.name}`}
                                     >
