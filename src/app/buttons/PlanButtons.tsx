@@ -44,7 +44,7 @@ const PlanButtons = ({ workout }: PlanButtonsProps) => {
                 className="bg-lime-400 text-black px-5 py-3 rounded-md font-bold text-sm flex items-center gap-2"
             >
                 <Plus size={18} />
-                Add to today's plan
+                Add to today&apos;s plan
             </button>
 
             {/* Save */}
